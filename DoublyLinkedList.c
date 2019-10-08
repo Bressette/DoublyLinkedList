@@ -15,10 +15,11 @@ struct node
      newNode->element = newElement;
      newNode->next = NULL;
 
-     if(head == NULL)
+     if(temp == NULL)
      {
-         head = newNode;
-         return head;
+         newNode->prev = NULL;
+         temp = newNode;
+         return temp;
      }
 
      while(temp->next != NULL)
@@ -27,7 +28,7 @@ struct node
      }
      temp->next = newNode;
      newNode->prev = temp;
-     return temp;
+     return head;
 
  }
 
@@ -37,8 +38,6 @@ struct node
 
      if(head == NULL)
      {
-         printf("in else if");
-         printf("in if");
          printf("The list is empty\n");
          return;
      }
@@ -68,7 +67,8 @@ struct node
      }
 
      else
-        printf("Neither the head or the tail was passed into the function\n");
+         printf("Neither the head or the tail was passed into the function\n");
+
 
  }
 
@@ -77,9 +77,11 @@ int main()
     struct node *head = NULL;
 
     head = insertLast(head, 10);
-    head->prev = NULL;
     head = insertLast(head, 20);
-    printf("%d\n", head->element);
+    head = insertLast(head, 30);
+    head = insertLast(head, 40);
+    head = insertLast(head, 50);
+
 
     printList(head);
     return 0;
