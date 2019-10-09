@@ -72,16 +72,29 @@ struct node
 
  }
 
+ int get(struct node *head, int position)
+ {
+     struct node *temp = head;
+
+     for(int i = 0; i < position; i++)
+     {
+         temp = temp->next;
+     }
+
+     return temp->element;
+ }
+
 int main()
 {
     struct node *head = NULL;
-
+    int element;
     head = insertLast(head, 10);
     head = insertLast(head, 20);
     head = insertLast(head, 30);
     head = insertLast(head, 40);
     head = insertLast(head, 50);
-
+    element = get(head, 3);
+    printf("The value at index 3 is %d\n", element);
 
     printList(head);
     return 0;
