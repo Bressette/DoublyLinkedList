@@ -84,6 +84,18 @@ struct node
      return temp->element;
  }
 
+ int sizeList(struct node *head)
+ {
+     struct node *temp = head;
+     int sizeOfList = 0;
+     while(temp != NULL)
+     {
+         sizeOfList++;
+         temp = temp->next;
+     }
+     return sizeOfList;
+ }
+
 int main()
 {
     struct node *head = NULL;
@@ -97,5 +109,7 @@ int main()
     printf("The value at index 3 is %d\n", element);
 
     printList(head);
+    int size = sizeList(head);
+    printf("The size of the list is %d\n", size);
     return 0;
 }
