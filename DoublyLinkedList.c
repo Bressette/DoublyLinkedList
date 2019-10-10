@@ -70,26 +70,53 @@ struct node
 
  }
 
- int get(struct node *head, int position)
+ int get(struct node *pointer, int position)
  {
-     struct node *temp = head;
+     struct node *temp = pointer;
+
+     if(pointer->prev == NULL)
+     {
+
 
      for(int i = 0; i < position; i++)
      {
          temp = temp->next;
      }
+     }
+
+     else
+     {
+         int iterations = sizeList(temp) - position;
+         for(int i = 1; i < iterations; i++)
+         {
+             temp = temp->prev;
+         }
+     }
 
      return temp->element;
  }
 
- int sizeList(struct node *head)
+ int sizeList(struct node *pointer)
  {
-     struct node *temp = head;
+     struct node *temp = pointer;
      int sizeOfList = 0;
-     while(temp != NULL)
+
+     if(temp->prev == NULL)
      {
-         sizeOfList++;
-         temp = temp->next;
+        while(temp != NULL)
+        {
+            sizeOfList++;
+            temp = temp->next;
+        }
+     }
+
+     else
+     {
+         while(temp != NULL)
+         {
+             sizeOfList++;
+             temp = temp->prev;
+         }
      }
      return sizeOfList;
  }
@@ -119,6 +146,10 @@ int main()
     head = insertLast(head, 50, &tail);
     element = get(head, 3);
     printf("The value at index 3 is %d\n", element);
+    element = get(tail, 3);
+    printf("The value at index 3 is %d\n", element);
+    element = get(tail, 1);
+    printf("The value at index 1 is %d\n", element);
 
     printList(head);
     int size = sizeList(head);
