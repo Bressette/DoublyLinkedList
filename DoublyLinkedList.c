@@ -10,7 +10,7 @@ struct node
 
  struct node *insertLast(struct node *head, int newElement, struct node **tail)
  {
-     struct node *temp = head;
+     struct node *temp = (*tail);
      struct node *newNode = malloc(sizeof(struct node));
      newNode->element = newElement;
      newNode->next = NULL;
@@ -23,10 +23,6 @@ struct node
          return temp;
      }
 
-     while(temp->next != NULL)
-     {
-         temp = temp->next;
-     }
      temp->next = newNode;
      newNode->prev = temp;
      (*tail) = newNode;
@@ -117,13 +113,10 @@ int main()
     struct node *tail = NULL;
     int element;
     head = insertLast(head, 10, &tail);
-    printf("The value of tail is %d\n", tail->element);
     head = insertLast(head, 20, &tail);
-    printf("The value of tail is %d\n", tail->element);
     head = insertLast(head, 30, &tail);
     head = insertLast(head, 40, &tail);
     head = insertLast(head, 50, &tail);
-    printf("The value of tail is %d\n", tail->element);
     element = get(head, 3);
     printf("The value at index 3 is %d\n", element);
 
