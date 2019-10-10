@@ -8,7 +8,7 @@ struct node
     struct node *prev;
 };
 
- struct node *insertLast(struct node *head, int newElement)
+ struct node *insertLast(struct node *head, int newElement, struct node **tail)
  {
      struct node *temp = head;
      struct node *newNode = malloc(sizeof(struct node));
@@ -19,6 +19,7 @@ struct node
      {
          newNode->prev = NULL;
          temp = newNode;
+         (*tail) = temp;
          return temp;
      }
 
@@ -28,6 +29,7 @@ struct node
      }
      temp->next = newNode;
      newNode->prev = temp;
+     (*tail) = newNode;
      return head;
 
  }
@@ -96,15 +98,32 @@ struct node
      return sizeOfList;
  }
 
+ struct node *removeElement(struct node *head, int position)
+ {
+     struct node *temp = head;
+     struct node *temp2 = head;
+
+     for(int i = 0; i < position; i++)
+     {
+         temp2 = temp;
+         temp = temp->next;
+     }
+
+ }
+
 int main()
 {
     struct node *head = NULL;
+    struct node *tail = NULL;
     int element;
-    head = insertLast(head, 10);
-    head = insertLast(head, 20);
-    head = insertLast(head, 30);
-    head = insertLast(head, 40);
-    head = insertLast(head, 50);
+    head = insertLast(head, 10, &tail);
+    printf("The value of tail is %d\n", tail->element);
+    head = insertLast(head, 20, &tail);
+    printf("The value of tail is %d\n", tail->element);
+    head = insertLast(head, 30, &tail);
+    head = insertLast(head, 40, &tail);
+    head = insertLast(head, 50, &tail);
+    printf("The value of tail is %d\n", tail->element);
     element = get(head, 3);
     printf("The value at index 3 is %d\n", element);
 
