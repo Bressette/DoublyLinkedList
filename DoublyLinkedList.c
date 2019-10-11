@@ -121,16 +121,33 @@ struct node
      return sizeOfList;
  }
 
- struct node *removeElement(struct node *head, int position)
+ struct node *removeElement(struct node *head, int position, struct node **tail)
  {
      struct node *temp = head;
      struct node *temp2 = head;
 
+
      for(int i = 0; i < position; i++)
      {
-         temp2 = temp;
          temp = temp->next;
      }
+
+     if(position == (sizeList(head)-1))
+     {
+         temp2 = temp->prev;
+         temp2->next = NULL;
+         (*tail) = temp2;
+     }
+
+     else
+     {
+     temp2 = temp->prev;
+     temp2->next = temp->next;
+     temp2 = temp->next;
+     temp2->prev = temp->prev;
+     }
+
+     return head;
 
  }
 
@@ -139,11 +156,13 @@ int main()
     struct node *head = NULL;
     struct node *tail = NULL;
     int element;
+
     head = insertLast(head, 10, &tail);
     head = insertLast(head, 20, &tail);
     head = insertLast(head, 30, &tail);
     head = insertLast(head, 40, &tail);
     head = insertLast(head, 50, &tail);
+
     element = get(head, 3);
     printf("The value at index 3 is %d\n", element);
     element = get(tail, 3);
@@ -151,8 +170,44 @@ int main()
     element = get(tail, 1);
     printf("The value at index 1 is %d\n", element);
 
+    printf("Printing from head\n");
     printList(head);
+
+    printf("Printing from tail\n");
+    printList(tail);
+
     int size = sizeList(head);
     printf("The size of the list is %d\n", size);
+
+    printf("\n");
+
+    printf("Removing the element in the 4th index\n");
+    removeElement(head, 4, &tail);
+
+    printf("Printing from the head\n");
+    printList(head);
+    printf("Printing from the tail\n");
+    printList(tail);
+
+    printf("\n");
+    printf("Removing the element in the 2nd index\n");
+    removeElement(head, 2, &tail);
+
+    printf("Printing from the head\n");
+    printList(head);
+    printf("Printing from the tail\n");
+    printList(tail);
+    printf("\n");
+
+    printf("Inserting elements\n");
+    insertLast(head, 42, &tail);
+    insertLast(head, 90, &tail);
+
+    printf("Printing from the head\n");
+    printList(head);
+    printf("Printing from the tail\n");
+    printList(tail);
+
+
     return 0;
 }
