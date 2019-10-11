@@ -151,6 +151,25 @@ struct node
 
  }
 
+
+struct node *reverseList(struct node *head)
+{
+    if(head == NULL)
+        return NULL;
+
+    struct node *temp = head->next;
+    head->next = head->prev;
+    head->prev = temp;
+
+    if(head->prev == NULL)
+        return head;
+
+    return reverseList(head->prev);
+
+}
+
+
+
 int main()
 {
     struct node *head = NULL;
@@ -207,6 +226,15 @@ int main()
     printList(head);
     printf("Printing from the tail\n");
     printList(tail);
+
+    printf("\n");
+
+    printf("Reverse List\n");
+
+    head = reverseList(head);
+
+    printf("Printing from the head\n");
+    printList(head);
 
 
     return 0;
