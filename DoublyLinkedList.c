@@ -152,7 +152,7 @@ struct node
  }
 
 
-struct node *reverseList(struct node *head)
+struct node *reverseList(struct node *head, struct node **tail)
 {
     if(head == NULL)
         return NULL;
@@ -162,9 +162,19 @@ struct node *reverseList(struct node *head)
     head->prev = temp;
 
     if(head->prev == NULL)
-        return head;
+    {
+        temp = head;
+        while(temp->next != NULL)
+        {
+            temp = temp->next;
+        }
+        (*tail) = temp;
+       return head;
 
-    return reverseList(head->prev);
+    }
+
+
+    return reverseList(head->prev, tail);
 
 }
 
@@ -182,20 +192,31 @@ int main()
     head = insertLast(head, 40, &tail);
     head = insertLast(head, 50, &tail);
 
+    printf("Get function for index 3 from the head\n");
     element = get(head, 3);
     printf("The value at index 3 is %d\n", element);
+    printf("Get function for index 3 from the tail\n");
     element = get(tail, 3);
     printf("The value at index 3 is %d\n", element);
+    printf("Get function for index from the tail\n");
     element = get(tail, 1);
     printf("The value at index 1 is %d\n", element);
 
+    printf("\n");
     printf("Printing from head\n");
     printList(head);
 
     printf("Printing from tail\n");
     printList(tail);
 
+    printf("\n");
+
+    printf("Finding the size of the list from the head\n");
     int size = sizeList(head);
+    printf("The size of the list is %d\n", size);
+
+    printf("Finding the size of the list from the tail\n");
+    size = sizeList(tail);
     printf("The size of the list is %d\n", size);
 
     printf("\n");
@@ -231,10 +252,13 @@ int main()
 
     printf("Reverse List\n");
 
-    head = reverseList(head);
+    head = reverseList(head, &tail);
 
     printf("Printing from the head\n");
     printList(head);
+
+    printf("Printing from the tail\n");
+    printList(tail);
 
 
     return 0;
