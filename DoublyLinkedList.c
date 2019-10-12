@@ -8,40 +8,48 @@ struct node
     struct node *prev;
 };
 
- struct node *insertLast(struct node *head, int newElement, struct node **tail)
+/*Function that takes in the tail of a list and an int element
+ *and adds a newNode after tail and returns the new tail of the list
+ */
+ struct node *insertLast(struct node *tail, int newElement)
  {
-     struct node *temp = (*tail);
+
+     //initializes a new node and sets the value in new node to the new element
      struct node *newNode = malloc(sizeof(struct node));
      newNode->element = newElement;
      newNode->next = NULL;
 
-     if(temp == NULL)
+     //case when the list is empty the tail becomes the newNode
+     if(tail == NULL)
      {
          newNode->prev = NULL;
-         temp = newNode;
-         (*tail) = temp;
-         return temp;
+         return newNode;
      }
 
-     temp->next = newNode;
-     newNode->prev = temp;
-     (*tail) = newNode;
-     return head;
+     //case when the list is not empty the element after tail becomes newNode
+     tail->next = newNode;
+     newNode->prev = tail;
+     return newNode;
 
  }
 
- void printList(struct node *head)
+ /*Function that can print a list given either the head or the tail of the list
+  *if the head is given the list is printed in normal order; if the tail is given
+  *the list is printed in reverse order
+  */
+ void printList(struct node *pointer)
  {
-     struct node *temp = head;
+     struct node *temp = pointer;
 
-     if(head == NULL)
+     //case when the given list is empty
+     if(pointer == NULL)
      {
          printf("The list is empty\n");
          return;
      }
 
      //case when the input is the head of the list
-     else if(head->prev == NULL)
+     else if(pointer->prev == NULL)
      {
 
          while(temp != NULL)
@@ -53,7 +61,7 @@ struct node
      }
      //case when the input is the tail of the list
 
-     else if(head->next == NULL)
+     else if(pointer->next == NULL)
      {
 
          while(temp != NULL)
@@ -64,26 +72,33 @@ struct node
          printf("\n");
      }
 
+     //case when neither the head or the tail is passed into the function
      else
          printf("Neither the head or the tail was passed into the function\n");
 
 
  }
 
+ /*Function that returns the value at a certain position in the list
+  *and can take in either the head or the tail of the list to return
+  *the element at a certain index
+  */
  int get(struct node *pointer, int position)
  {
      struct node *temp = pointer;
 
+     //case when the given pointer is the head of the list
      if(pointer->prev == NULL)
      {
 
 
-     for(int i = 0; i < position; i++)
-     {
-         temp = temp->next;
-     }
+        for(int i = 0; i < position; i++)
+        {
+            temp = temp->next;
+        }
      }
 
+     //case when the given pointer is the tail of the list
      else
      {
          int iterations = sizeList(temp) - position;
@@ -96,6 +111,11 @@ struct node
      return temp->element;
  }
 
+ /*Function that returns the size of the list as an int value.
+  *The function can take either the head or the tail of the list
+  *and iterate through the list to increment a counter that is returned
+  *to give the size of the list
+  */
  int sizeList(struct node *pointer)
  {
      struct node *temp = pointer;
@@ -121,7 +141,14 @@ struct node
      return sizeOfList;
  }
 
- struct node *removeElement(struct node *head, int position, struct node **tail)
+
+ /*This function removes an element from the list given the head,
+  *iterating through the list until temp = the element to be removed
+  *NOTE: If the position specified is the tail of the list the tail
+  *will not be updated and as a result the element in tail will be null
+  *as temp is freed at the end of this function
+  */
+ struct node *removeElement(struct node *head, int position)
  {
      struct node *temp = head;
      struct node *temp2 = head;
@@ -132,28 +159,36 @@ struct node
          temp = temp->next;
      }
 
+     //case when the position is the last index in the array
      if(position == (sizeList(head)-1))
      {
+         //temp2 is the new tail of the list
          temp2 = temp->prev;
          temp2->next = NULL;
-         (*tail) = temp2;
      }
 
+     //case when the position is not the last index in the array
      else
      {
-     temp2 = temp->prev;
-     temp2->next = temp->next;
-     temp2 = temp->next;
-     temp2->prev = temp->prev;
+        temp2 = temp->prev;
+        temp2->next = temp->next;
+        temp2 = temp->next;
+        temp2->prev = temp->prev;
      }
-
+     free(temp);
      return head;
 
  }
 
-
-struct node *reverseList(struct node *head, struct node **tail)
+/*Function that takes in the head of a list and recursively
+ *reverses the elements in the list then returns the head of the list
+ *Note that the tail is not updated in this function and will still
+ *refer to the tail of the original list and will need to be updated
+ *manually after this function is called
+ */
+struct node *reverseList(struct node *head)
 {
+    //base case
     if(head == NULL)
         return NULL;
 
@@ -161,20 +196,14 @@ struct node *reverseList(struct node *head, struct node **tail)
     head->next = head->prev;
     head->prev = temp;
 
+    //case when the list is reversed and the new head is returned
     if(head->prev == NULL)
     {
-        temp = head;
-        while(temp->next != NULL)
-        {
-            temp = temp->next;
-        }
-        (*tail) = temp;
        return head;
-
     }
 
-
-    return reverseList(head->prev, tail);
+    //recursive function call
+    return reverseList(head->prev);
 
 }
 
@@ -182,15 +211,26 @@ struct node *reverseList(struct node *head, struct node **tail)
 
 int main()
 {
+    //initializing variables
     struct node *head = NULL;
     struct node *tail = NULL;
     int element;
+    int size;
 
-    head = insertLast(head, 10, &tail);
-    head = insertLast(head, 20, &tail);
-    head = insertLast(head, 30, &tail);
-    head = insertLast(head, 40, &tail);
-    head = insertLast(head, 50, &tail);
+
+    printf("Inserting elements\n");
+    tail = insertLast(tail, 10);
+    head = tail;
+    tail = insertLast(tail, 20);
+    tail = insertLast(tail, 30);
+    tail = insertLast(tail, 40);
+    tail = insertLast(tail, 50);
+
+    printf("Printing from head\n");
+    printList(head);
+    printf("Printing from tail\n");
+    printList(tail);
+    printf("\n");
 
     printf("Get function for index 3 from the head\n");
     element = get(head, 3);
@@ -198,7 +238,7 @@ int main()
     printf("Get function for index 3 from the tail\n");
     element = get(tail, 3);
     printf("The value at index 3 is %d\n", element);
-    printf("Get function for index from the tail\n");
+    printf("Get function for index 1 from the tail\n");
     element = get(tail, 1);
     printf("The value at index 1 is %d\n", element);
 
@@ -212,7 +252,7 @@ int main()
     printf("\n");
 
     printf("Finding the size of the list from the head\n");
-    int size = sizeList(head);
+    size = sizeList(head);
     printf("The size of the list is %d\n", size);
 
     printf("Finding the size of the list from the tail\n");
@@ -221,8 +261,14 @@ int main()
 
     printf("\n");
 
-    printf("Removing the element in the 4th index\n");
-    removeElement(head, 4, &tail);
+    /*Note that if the position that is specified in the removeElement
+     *function is the tail of the list the value of tail will be null
+     *as the tail element was the element that is removed and head is returned
+     *from the function meaning that tail is not updated and will not function
+     *properly unless manually reassigned to the correct tail value in the main function
+     */
+    printf("Removing the element in the 3rd index\n");
+    head = removeElement(head, 3);
 
     printf("Printing from the head\n");
     printList(head);
@@ -231,7 +277,7 @@ int main()
 
     printf("\n");
     printf("Removing the element in the 2nd index\n");
-    removeElement(head, 2, &tail);
+    head = removeElement(head, 2);
 
     printf("Printing from the head\n");
     printList(head);
@@ -240,8 +286,8 @@ int main()
     printf("\n");
 
     printf("Inserting elements\n");
-    insertLast(head, 42, &tail);
-    insertLast(head, 90, &tail);
+    tail = insertLast(tail, 42);
+    tail = insertLast(tail, 90);
 
     printf("Printing from the head\n");
     printList(head);
@@ -252,13 +298,19 @@ int main()
 
     printf("Reverse List\n");
 
-    head = reverseList(head, &tail);
-
-    printf("Printing from the head\n");
+    printf("Printing from the head before reversing the list\n");
     printList(head);
 
-    printf("Printing from the tail\n");
-    printList(tail);
+    /*Note that this function only changes the value of head
+     *in the main function and as a result tail will not be updated
+     *and will show the tail of the old list unless the tail is reassigned
+     *based on the new head after the reverseList function
+     */
+    head = reverseList(head);
+
+    printf("Printing from the head after reversing the list\n");
+    printList(head);
+
 
 
     return 0;
