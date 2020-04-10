@@ -1,4 +1,4 @@
-# doublyLinkedList
+# DoublyLinkedList
 
 Implementation of a doublyLinkedList using C and structs.
 
